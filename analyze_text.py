@@ -24,27 +24,37 @@ def is_multiple_choice_question(text):
     Determines whether the given text is a multiple-choice question using OpenAI's ChatCompletion API.
     """
     prompt = (
-        "Determine whether the following text is a multiple-choice question. If the the text is a multiple choice "
-        "question, parse out just the question and the possible answers."
+        "Determine whether the following text contains a multiple-choice question. If the text does contain a "
+        "multiple choice question, parse out the question and the possible answers. Reply only with information "
+        "pertinent to the question, the question itself, the possible answers, and finally, the correct answer. If "
+        "the text does not provide the correct answer, research it and provide the closest answer from the answers "
+        "provided."
         f"\nText: {text}\n\n"
-        "Is there a multiple-choice question in the text?"
     )
 
     try:
         # Create a chat completion request to OpenAI
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",  # Replace with gpt-4 if preferred
+            model="gpt-4",  # Replace with gpt-4 if preferred
             messages=[
-                {"role": "system", "content": "You are a bot that determines whether a given chunk of text "
-                                              "contains a multiple-choice question, and if so, answers it correctly."},
+                {"role": "system", "content": "You are purpose-built Multiple Choice Question solver. You solve "
+                                              "multiple choice questions with the correct answer."},
                 {"role": "user", "content": prompt},
             ],
             temperature=0  # Use 0 for deterministic responses
         )
 
-        # Extract the assistant's response
         logging.info(f"OpenAI API response: {response}")
-        return print(response.choices[0].message)
+
+        # Access the content from the ChatCompletionMessage object
+        raw_message = response.choices[0].message.content
+
+        # Replace literal "\n" with actual newlines
+        formatted_message = raw_message.replace("\\n", "\n")
+
+        # Print the formatted text for readability, and return it
+        print(formatted_message)
+        return formatted_message
 
     except Exception as e:
         logging.error(f"Error communicating with OpenAI API: {e}")
