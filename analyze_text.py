@@ -1,3 +1,5 @@
+"""analyze_text.py v0.1"""
+
 import os
 import argparse
 import logging

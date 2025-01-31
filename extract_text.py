@@ -1,4 +1,4 @@
-# extract_text.py
+# extract_text.py 0.1
 
 import pytesseract
 from PIL import Image

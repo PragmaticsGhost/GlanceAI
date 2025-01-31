@@ -1,4 +1,4 @@
-# capture_chrome_window.py
+# capture_chrome_window.py v0.1
 
 import pygetwindow as gw
 import pyautogui
