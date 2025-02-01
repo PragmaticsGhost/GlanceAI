@@ -1,4 +1,4 @@
-# extract_text.py 0.1
+# extract_text.py 0.2
 
 import pytesseract
 from PIL import Image
@@ -6,12 +6,11 @@ import argparse
 import logging
 import sys
 import os
-
+import re  # Added to work with regular expressions
 
 def setup_logging():
     logging.basicConfig(level=logging.INFO, filename='app.log',
                         format='%(asctime)s %(levelname)s:%(message)s')
-
 
 def extract_text(image_path, output_path):
     try:
@@ -22,17 +21,32 @@ def extract_text(image_path, output_path):
         image = Image.open(image_path)
         text = pytesseract.image_to_string(image)
 
-        # Save the extracted text
+        # Save all extracted text to the output file
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(text.strip())
         logging.info(f"Extracted text saved to {output_path}")
         print(f"Extracted text saved to {output_path}")
+
+        # Use a regex to find URL(s) in the extracted text.
+        # This regex looks for strings starting with http:// or https://
+        url_pattern = re.compile(r'https?://\S+')
+        urls = url_pattern.findall(text)
+
+        if urls:
+            # Write only the first URL found to URL.txt
+            with open("URL.txt", 'w', encoding='utf-8') as url_file:
+                url_file.write(urls[0])
+            logging.info(f"URL saved to URL.txt: {urls[0]}")
+            print(f"URL saved to URL.txt: {urls[0]}")
+        else:
+            logging.info("No URL found in the extracted text.")
+            print("No URL found in the extracted text.")
+
         return True
     except Exception as e:
         logging.exception("Error extracting text:")
         print(f"Error extracting text: {e}", file=sys.stderr)
         return False
-
 
 def main():
     setup_logging()
@@ -51,7 +65,6 @@ def main():
     success = extract_text(args.input, args.output)
     if not success:
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

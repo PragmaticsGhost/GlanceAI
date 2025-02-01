@@ -24,21 +24,18 @@ def is_multiple_choice_question(text):
     Determines whether the given text is a multiple-choice question using OpenAI's ChatCompletion API.
     """
     prompt = (
-        "Determine whether the following text contains a multiple-choice question. If the text does contain a "
-        "multiple choice question, parse out the question and the possible answers. Reply only with information "
-        "pertinent to the question, the question itself, the possible answers, and finally, the correct answer. If "
-        "the text does not provide the correct answer, research it and provide the closest answer from the answers "
-        "provided."
+        "If the following text contains a multiple choice question, parse out contextual information related to the "
+        "question, the question itself, and the possible answers. You must always choose one of the provided answers. "
+        "Use the contextual information and the provided answers to choose the correct answer."
         f"\nText: {text}\n\n"
     )
 
     try:
         # Create a chat completion request to OpenAI
         response = client.chat.completions.create(
-            model="gpt-4",  # Replace with gpt-4 if preferred
+            model="gpt-4o",  # Replace with gpt-4 if preferred
             messages=[
-                {"role": "system", "content": "You are purpose-built Multiple Choice Question solver. You solve "
-                                              "multiple choice questions with the correct answer."},
+                {"role": "system", "content": "You are purpose-built Multiple Choice Question solver."},
                 {"role": "user", "content": prompt},
             ],
             temperature=0  # Use 0 for deterministic responses

@@ -4,7 +4,6 @@ import pygetwindow as gw
 import pyautogui
 import time
 import argparse
-import os
 import logging
 
 
