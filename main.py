@@ -43,20 +43,20 @@ def main():
 
             # Step 1: Capture Chrome Window
             print("Step 1: Capturing Chrome window...")
-            cmd_capture = [sys.executable, "capture_chrome_window.py", "--output", screenshot_path]
+            cmd_capture = [sys.executable, "ROIExtractor.py", "--output", extracted_text_path]
             if not run_command(cmd_capture):
                 print("Failed to capture Chrome window. Skipping this iteration.")
                 time.sleep(5)
                 continue  # Skip to the next iteration
 
             # Step 2: Extract Text
-            print("Step 2: Extracting text from image...")
-            cmd_extract = [sys.executable, "extract_text.py", "--input", screenshot_path, "--output",
-                           extracted_text_path]
-            if not run_command(cmd_extract):
-                print("Failed to extract text. Skipping this iteration.")
-                time.sleep(5)
-                continue
+            #print("Step 2: Extracting text from image...")
+            #cmd_extract = [sys.executable, "extract_text.py", "--input", screenshot_path, "--output",
+            #               extracted_text_path]
+            #if not run_command(cmd_extract):
+            #    print("Failed to extract text. Skipping this iteration.")
+            #    time.sleep(5)
+            #    continue
 
             # Step 3: Analyze Text
             print("Step 3: Analyzing extracted text...")
